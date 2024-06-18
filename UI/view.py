@@ -1,6 +1,7 @@
 import flet as ft
 
 
+
 class View(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
@@ -8,34 +9,65 @@ class View(ft.UserControl):
         self._page = page
         self._page.title = "Template application using MVC and DAO"
         self._page.horizontal_alignment = 'CENTER'
-        self._page.theme_mode = ft.ThemeMode.DARK
+        self._page.theme_mode = ft.ThemeMode.LIGHT
         # controller (it is not initialized. Must be initialized in the main, after the controller is created)
         self._controller = None
         # graphical elements
         self._title = None
-        self.txt_name = None
-        self.btn_hello = None
+        self.ddyear = None
+        self.ddshape = None
+        self.btn_graph = None
         self.txt_result = None
         self.txt_container = None
 
+        self.txtN = None
+        self.txtOut2 = None
+        self.btn_path = None
     def load_interface(self):
         # title
-        self._title = ft.Text("Hello World", color="blue", size=24)
+        self._title = ft.Text("ESAME 18/01/2023 NYC-Hotspots", color="blue", size=24)
         self._page.controls.append(self._title)
 
-        #ROW with some controls
-        # text field for the name
-        self.txt_name = ft.TextField(
-            label="name",
-            width=200,
-            hint_text="Insert a your name"
-        )
-
-        # button for the "hello" reply
-        self.btn_hello = ft.ElevatedButton(text="Hello", on_click=self._controller.handle_hello)
-        row1 = ft.Row([self.txt_name, self.btn_hello],
-                      alignment=ft.MainAxisAlignment.CENTER)
+        # ROW1
+        self._ddProvider = ft.Dropdown(label="Provider")
+        self._btnCreaGrafo = ft.ElevatedButton(text="Crea Grafo",
+                                      on_click=self._controller.handleCreaGrafo)
+        self._controller.fillDD()
+        row1 = ft.Row([
+            ft.Container(self._ddProvider, width=300),
+            ft.Container(self._btnCreaGrafo, width=300)
+        ], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row1)
+
+        # ROW2
+        self._txtDistanza = ft.TextField(label="Distanza")
+        self._btnAnalisiGrafo = ft.ElevatedButton(text="Analisi Grafo",
+                                                  on_click=self._controller.handleAnalisiGrafo)
+
+        row2 = ft.Row([
+            ft.Container(self._txtDistanza, width=300),
+            ft.Container(self._btnAnalisiGrafo, width=300)
+        ], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.controls.append(row2)
+
+        # ROW3
+        self._txtStringa = ft.TextField(label="Stringa")
+        self._btnCalcolaPercorso = ft.ElevatedButton(text="Calcola Percorso",
+                                                     on_click=self._controller.handleCalcolaPercorso)
+        row3 = ft.Row([
+            ft.Container(self._txtStringa, width=300),
+            ft.Container(self._btnCalcolaPercorso, width=300)
+        ], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.controls.append(row3)
+
+        # ROW4
+        self._ddTarget = ft.Dropdown(label="Target")
+
+        row4 = ft.Row([
+            ft.Container(self._ddTarget, width=300),
+            ft.Container(None, width=300)
+        ], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.controls.append(row4)
 
         # List View where the reply is printed
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
